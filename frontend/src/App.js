@@ -5,6 +5,7 @@ import RemittanceForm from "./components/RemittanceForm";
 import InvoiceViewer from "./components/InvoiceViewer";
 import ErrorBoundary from "./components/ErrorBoundary";
 import TransactionHistory from "./pages/TransactionHistory";
+import HelpCenter from "./components/HelpCenter";
 import "./App.css";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
             <Link to="/">Send Remittance</Link>
             <Link to="/invoices">View Invoices</Link>
             <Link to="/transactions">Transaction History</Link>
+            <Link to="/help">Help Center</Link>
           </nav>
         </header>
         {/* #105 — wrap route tree so any page-level render error shows a
@@ -28,6 +30,7 @@ function App() {
               <Route path="/" element={<RemittanceForm />} />
               <Route path="/invoices" element={<InvoiceViewer />} />
               <Route path="/transactions" element={<TransactionHistory />} />
+              <Route path="/help" element={<HelpCenter />} />
             </Routes>
           </main>
         </ErrorBoundary>
