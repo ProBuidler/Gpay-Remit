@@ -141,7 +141,7 @@ func TestGetAPIVersion(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c, _ := gin.CreateTestContext(httptest.NewRecorder())
-			
+
 			if tt.setVersion {
 				c.Set("api_version", tt.versionValue)
 			}

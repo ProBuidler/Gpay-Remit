@@ -145,10 +145,10 @@ func TestIntegrationAuthAndPayments(t *testing.T) {
 	accessToken := registerAndLogin(t, router)
 
 	payload := map[string]any{
-		"sender_id":    1,
-		"recipient_id": 2,
-		"amount":       50.5,
-		"currency":     "USD",
+		"sender_id":       1,
+		"recipient_id":    2,
+		"amount":          50.5,
+		"currency":        "USD",
 		"target_currency": "EUR",
 	}
 	body, err := json.Marshal(payload)

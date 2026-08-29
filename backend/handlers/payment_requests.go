@@ -28,15 +28,15 @@ func NewPaymentRequestHandler(db *gorm.DB, fees *services.FeeService, emailServi
 }
 
 type CreatePaymentRequestRequest struct {
-	TargetUserID uint    `json:"target_user_id" binding:"required"`
-	Amount       float64 `json:"amount" binding:"required,gt=0"`
-	Currency     string  `json:"currency" binding:"required"`
-	AssetCode    string  `json:"asset_code" binding:"required"`
-	AssetIssuer  string  `json:"asset_issuer"`
-	Description  string  `json:"description"`
-	Reference    string  `json:"reference"`
-	ExpiresInHours *int  `json:"expires_in_hours"`
-	Notes        string  `json:"notes"`
+	TargetUserID   uint    `json:"target_user_id" binding:"required"`
+	Amount         float64 `json:"amount" binding:"required,gt=0"`
+	Currency       string  `json:"currency" binding:"required"`
+	AssetCode      string  `json:"asset_code" binding:"required"`
+	AssetIssuer    string  `json:"asset_issuer"`
+	Description    string  `json:"description"`
+	Reference      string  `json:"reference"`
+	ExpiresInHours *int    `json:"expires_in_hours"`
+	Notes          string  `json:"notes"`
 }
 
 func (h *PaymentRequestHandler) CreatePaymentRequest(c *gin.Context) {

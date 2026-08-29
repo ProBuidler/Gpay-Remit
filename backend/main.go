@@ -79,7 +79,7 @@ func main() {
 	router.GET("/api/docs", handlers.DocsUI)
 	router.GET("/api/docs/openapi.yaml", handlers.DocsSpec)
 
-		gqlServer := graphql.NewServer(db, cfg)
+	gqlServer := graphql.NewServer(db, cfg)
 	router.GET("/playground", gqlServer.PlaygroundHandler())
 	router.GET("/graphql/playground", gqlServer.PlaygroundHandler())
 	router.POST("/graphql", gqlServer.QueryHandler())
@@ -148,12 +148,18 @@ func main() {
 			protected.GET("/webhooks/:id/deliveries", webhookHandler.GetWebhookDeliveries)
 			protected.POST("/webhooks/deliveries/:delivery_id/retry", webhookHandler.RetryWebhookDelivery)
 
-			
 			analyticsHandler := handlers.NewAnalyticsHandler(db)
 			protected.GET("/analytics/volume", middleware.RequireRole("admin"), analyticsHandler.GetVolumeMetrics)
 			protected.GET("/analytics/fees", middleware.RequireRole("admin"), analyticsHandler.GetFeeMetrics)
 			protected.GET("/analytics/success-rate", middleware.RequireRole("admin"), analyticsHandler.GetSuccessRate)
 			protected.GET("/analytics/top-corridors", middleware.RequireRole("admin"), analyticsHandler.GetTopCorridors)
+
+			feedbackHandler := handlers.NewFeedbackHandler(db, cfg)
+			protected.POST("/feedback", feedbackHandler.SubmitFeedback)
+			protected.GET("/feedback", feedbackHandler.ListFeedback)
+			protected.GET("/feedback/:id", feedbackHandler.GetFeedback)
+			protected.PUT("/feedback/:id/status", middleware.RequireRole("admin"), feedbackHandler.UpdateFeedbackStatus)
+			protected.DELETE("/feedback/:id", feedbackHandler.DeleteFeedback)
 
 		}
 	}
@@ -220,12 +226,18 @@ func main() {
 			protected.GET("/webhooks/:id/deliveries", webhookHandler.GetWebhookDeliveries)
 			protected.POST("/webhooks/deliveries/:delivery_id/retry", webhookHandler.RetryWebhookDelivery)
 
-			
 			analyticsHandler := handlers.NewAnalyticsHandler(db)
 			protected.GET("/analytics/volume", middleware.RequireRole("admin"), analyticsHandler.GetVolumeMetrics)
 			protected.GET("/analytics/fees", middleware.RequireRole("admin"), analyticsHandler.GetFeeMetrics)
 			protected.GET("/analytics/success-rate", middleware.RequireRole("admin"), analyticsHandler.GetSuccessRate)
 			protected.GET("/analytics/top-corridors", middleware.RequireRole("admin"), analyticsHandler.GetTopCorridors)
+
+			feedbackHandler := handlers.NewFeedbackHandler(db, cfg)
+			protected.POST("/feedback", feedbackHandler.SubmitFeedback)
+			protected.GET("/feedback", feedbackHandler.ListFeedback)
+			protected.GET("/feedback/:id", feedbackHandler.GetFeedback)
+			protected.PUT("/feedback/:id/status", middleware.RequireRole("admin"), feedbackHandler.UpdateFeedbackStatus)
+			protected.DELETE("/feedback/:id", feedbackHandler.DeleteFeedback)
 
 		}
 	}

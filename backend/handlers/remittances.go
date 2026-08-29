@@ -59,17 +59,17 @@ func DecodeCursor(encoded string) (PaginationCursor, error) {
 	if encoded == "" {
 		return cursor, nil
 	}
-	
+
 	data, err := base64.StdEncoding.DecodeString(encoded)
 	if err != nil {
 		return cursor, fmt.Errorf("invalid cursor encoding: %w", err)
 	}
-	
+
 	err = json.Unmarshal(data, &cursor)
 	if err != nil {
 		return cursor, fmt.Errorf("invalid cursor format: %w", err)
 	}
-	
+
 	return cursor, nil
 }
 
@@ -104,13 +104,13 @@ func Paginate(c *gin.Context) func(db *gorm.DB) *gorm.DB {
 }
 
 type CreateRemittanceRequest struct {
-	SenderAccount   string                 `json:"sender_account" binding:"required"`
-	RecipientAccount string                `json:"recipient_account" binding:"required"`
-	Amount          float64                `json:"amount" binding:"required,gt=0"`
-	AssetCode       string                 `json:"asset_code" binding:"required"`
-	AssetIssuer     string                 `json:"asset_issuer"`
-	Conditions      map[string]interface{} `json:"conditions"`
-	Notes           string                 `json:"notes"`
+	SenderAccount    string                 `json:"sender_account" binding:"required"`
+	RecipientAccount string                 `json:"recipient_account" binding:"required"`
+	Amount           float64                `json:"amount" binding:"required,gt=0"`
+	AssetCode        string                 `json:"asset_code" binding:"required"`
+	AssetIssuer      string                 `json:"asset_issuer"`
+	Conditions       map[string]interface{} `json:"conditions"`
+	Notes            string                 `json:"notes"`
 }
 
 type BatchPaymentItem struct {
@@ -351,14 +351,14 @@ func (h *RemittanceHandler) GetRemittance(c *gin.Context) {
 }
 
 type ListRemittancesResponse struct {
-	Data       []models.Payment `json:"data"`
-	Page       int              `json:"page,omitempty"`       // Deprecated: use cursor instead
-	PageSize   int              `json:"page_size,omitempty"`  // Deprecated: use limit instead
-	NextCursor string           `json:"next_cursor,omitempty"`
-	HasMore    bool             `json:"has_more"`
-	TotalCount *int64           `json:"total_count,omitempty"`
-	HasNext    *bool            `json:"has_next,omitempty"`
-	HasPrevious *bool           `json:"has_previous,omitempty"`
+	Data        []models.Payment `json:"data"`
+	Page        int              `json:"page,omitempty"`      // Deprecated: use cursor instead
+	PageSize    int              `json:"page_size,omitempty"` // Deprecated: use limit instead
+	NextCursor  string           `json:"next_cursor,omitempty"`
+	HasMore     bool             `json:"has_more"`
+	TotalCount  *int64           `json:"total_count,omitempty"`
+	HasNext     *bool            `json:"has_next,omitempty"`
+	HasPrevious *bool            `json:"has_previous,omitempty"`
 }
 
 func (h *RemittanceHandler) ListRemittances(c *gin.Context) {
@@ -367,7 +367,7 @@ func (h *RemittanceHandler) ListRemittances(c *gin.Context) {
 	// Support both cursor-based and legacy offset-based pagination
 	cursor := c.Query("cursor")
 	limitStr := c.Query("limit")
-	
+
 	// Cursor-based pagination (preferred)
 	if cursor != "" || limitStr != "" {
 		// Cursor-based pagination eliminates overflow risk (#198)
@@ -385,10 +385,10 @@ func (h *RemittanceHandler) ListRemittances(c *gin.Context) {
 		}
 
 		query := h.db.Model(&models.Payment{}).Order("created_at DESC, id DESC")
-		
+
 		// Apply cursor filtering: WHERE created_at < cursor.CreatedAt OR (created_at = cursor.CreatedAt AND id < cursor.ID)
 		if !decodedCursor.CreatedAt.IsZero() {
-			query = query.Where("created_at < ? OR (created_at = ? AND id < ?)", 
+			query = query.Where("created_at < ? OR (created_at = ? AND id < ?)",
 				decodedCursor.CreatedAt, decodedCursor.CreatedAt, decodedCursor.ID)
 		}
 

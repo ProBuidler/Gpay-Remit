@@ -25,7 +25,7 @@ func NewAnalyticsHandler(db *gorm.DB) *AnalyticsHandler {
 
 func (h *AnalyticsHandler) GetVolumeMetrics(c *gin.Context) {
 	period := c.DefaultQuery("period", "daily")
-	
+
 	if !isValidPeriod(period) {
 		c.Error(errors.NewValidationError("Invalid period", "Valid values are: daily, weekly, monthly, yearly"))
 		return
@@ -34,7 +34,7 @@ func (h *AnalyticsHandler) GetVolumeMetrics(c *gin.Context) {
 	startDate, endDate, customRange := parseDateRange(c, period)
 	if customRange {
 		cacheKey := fmt.Sprintf("analytics:volume:%s:%s", startDate.Format("2006-01-02"), endDate.Format("2006-01-02"))
-		
+
 		var cachedMetrics services.VolumeMetrics
 		found, err := utils.GetCached(cacheKey, &cachedMetrics)
 		if err == nil && found {
@@ -50,7 +50,7 @@ func (h *AnalyticsHandler) GetVolumeMetrics(c *gin.Context) {
 		}
 
 		cacheKey := fmt.Sprintf("analytics:volume:%s:%s", period, time.Now().Format("2006-01-02"))
-		
+
 		var cachedMetrics services.VolumeMetrics
 		found, err := utils.GetCached(cacheKey, &cachedMetrics)
 		if err == nil && found {
@@ -73,7 +73,7 @@ func (h *AnalyticsHandler) GetVolumeMetrics(c *gin.Context) {
 
 func (h *AnalyticsHandler) GetFeeMetrics(c *gin.Context) {
 	period := c.DefaultQuery("period", "daily")
-	
+
 	if !isValidPeriod(period) {
 		c.Error(errors.NewValidationError("Invalid period", "Valid values are: daily, weekly, monthly, yearly"))
 		return
@@ -82,7 +82,7 @@ func (h *AnalyticsHandler) GetFeeMetrics(c *gin.Context) {
 	startDate, endDate, customRange := parseDateRange(c, period)
 	if customRange {
 		cacheKey := fmt.Sprintf("analytics:fees:%s:%s", startDate.Format("2006-01-02"), endDate.Format("2006-01-02"))
-		
+
 		var cachedMetrics services.FeeMetrics
 		found, err := utils.GetCached(cacheKey, &cachedMetrics)
 		if err == nil && found {
@@ -98,7 +98,7 @@ func (h *AnalyticsHandler) GetFeeMetrics(c *gin.Context) {
 		}
 
 		cacheKey := fmt.Sprintf("analytics:fees:%s:%s", period, time.Now().Format("2006-01-02"))
-		
+
 		var cachedMetrics services.FeeMetrics
 		found, err := utils.GetCached(cacheKey, &cachedMetrics)
 		if err == nil && found {
@@ -121,7 +121,7 @@ func (h *AnalyticsHandler) GetFeeMetrics(c *gin.Context) {
 
 func (h *AnalyticsHandler) GetSuccessRate(c *gin.Context) {
 	period := c.DefaultQuery("period", "daily")
-	
+
 	if !isValidPeriod(period) {
 		c.Error(errors.NewValidationError("Invalid period", "Valid values are: daily, weekly, monthly, yearly"))
 		return
@@ -130,7 +130,7 @@ func (h *AnalyticsHandler) GetSuccessRate(c *gin.Context) {
 	startDate, endDate, customRange := parseDateRange(c, period)
 	if customRange {
 		cacheKey := fmt.Sprintf("analytics:success_rate:%s:%s", startDate.Format("2006-01-02"), endDate.Format("2006-01-02"))
-		
+
 		var cachedMetrics services.SuccessRateMetrics
 		found, err := utils.GetCached(cacheKey, &cachedMetrics)
 		if err == nil && found {
@@ -146,7 +146,7 @@ func (h *AnalyticsHandler) GetSuccessRate(c *gin.Context) {
 		}
 
 		cacheKey := fmt.Sprintf("analytics:success_rate:%s:%s", period, time.Now().Format("2006-01-02"))
-		
+
 		var cachedMetrics services.SuccessRateMetrics
 		found, err := utils.GetCached(cacheKey, &cachedMetrics)
 		if err == nil && found {
@@ -191,7 +191,7 @@ func (h *AnalyticsHandler) GetTopCorridors(c *gin.Context) {
 	}
 
 	cacheKey := fmt.Sprintf("analytics:corridors:%d:%s:%s", limit, startDate.Format("2006-01-02"), endDate.Format("2006-01-02"))
-	
+
 	var cachedCorridors []services.CorridorMetrics
 	found, err := utils.GetCached(cacheKey, &cachedCorridors)
 	if err == nil && found {
@@ -212,9 +212,9 @@ func (h *AnalyticsHandler) GetTopCorridors(c *gin.Context) {
 	utils.SetCached(cacheKey, corridors, getCacheDuration(period))
 
 	c.JSON(http.StatusOK, gin.H{
-		"corridors": corridors,
-		"limit":     limit,
-		"period":    period,
+		"corridors":  corridors,
+		"limit":      limit,
+		"period":     period,
 		"start_date": startDate.Format("2006-01-02"),
 		"end_date":   endDate.Format("2006-01-02"),
 	})
@@ -237,7 +237,7 @@ func parseDateRange(c *gin.Context, defaultPeriod string) (time.Time, time.Time,
 	if startDateStr != "" && endDateStr != "" {
 		startDate, err1 := time.Parse("2006-01-02", startDateStr)
 		endDate, err2 := time.Parse("2006-01-02", endDateStr)
-		
+
 		if err1 == nil && err2 == nil {
 			return startDate, endDate, true
 		}

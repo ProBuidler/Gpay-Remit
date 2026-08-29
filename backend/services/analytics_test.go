@@ -22,7 +22,7 @@ func setupTestDB(t *testing.T) *gorm.DB {
 
 func seedTestData(t *testing.T, db *gorm.DB) {
 	now := time.Now()
-	
+
 	testPayments := []models.Payment{
 		{
 			SenderID:        1,
@@ -253,7 +253,7 @@ func TestCalculateDateRange(t *testing.T) {
 				assert.False(t, start.IsZero())
 				assert.False(t, end.IsZero())
 				assert.True(t, end.After(start))
-				
+
 				if tt.validateRange != nil {
 					tt.validateRange(t, start, end)
 				}

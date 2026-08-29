@@ -25,24 +25,24 @@ func InitRedis(addr string, password string, db int) error {
 		Addr:            addr,
 		Password:        password,
 		DB:              db,
-		PoolSize:        10,               // Maximum number of connections
-		MinIdleConns:    2,                // Minimum idle connections to maintain
-		ConnMaxIdleTime: 5 * time.Minute,  // Close idle connections after this time
-		DialTimeout:     5 * time.Second,  // Connection timeout
-		ReadTimeout:     3 * time.Second,  // Read timeout
-		WriteTimeout:    3 * time.Second,  // Write timeout
+		PoolSize:        10,              // Maximum number of connections
+		MinIdleConns:    2,               // Minimum idle connections to maintain
+		ConnMaxIdleTime: 5 * time.Minute, // Close idle connections after this time
+		DialTimeout:     5 * time.Second, // Connection timeout
+		ReadTimeout:     3 * time.Second, // Read timeout
+		WriteTimeout:    3 * time.Second, // Write timeout
 	})
 
 	// Test connection with short timeout - don't panic if Redis is unavailable
 	pingCtx, cancel := context.WithTimeout(ctx, 2*time.Second)
 	defer cancel()
-	
+
 	_, err := RedisClient.Ping(pingCtx).Result()
 	if err != nil {
 		// Log warning but continue - application should function without Redis
 		fmt.Printf("WARNING: Redis unavailable at startup: %v — caching disabled\n", err)
 		RedisClient = nil // Set to nil to trigger graceful degradation
-		return nil // Don't return error - this is graceful degradation
+		return nil        // Don't return error - this is graceful degradation
 	}
 
 	fmt.Println("INFO: Redis connection established successfully")
@@ -126,7 +126,7 @@ func PingRedis() error {
 
 	pingCtx, cancel := context.WithTimeout(ctx, 2*time.Second)
 	defer cancel()
-	
+
 	_, err := RedisClient.Ping(pingCtx).Result()
 	if err != nil {
 		return ErrCacheUnavailable

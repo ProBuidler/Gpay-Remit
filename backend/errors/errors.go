@@ -9,12 +9,12 @@ import (
 type ErrorCode string
 
 const (
-	CodeInternal      ErrorCode = "INTERNAL_ERROR"
-	CodeValidation    ErrorCode = "VALIDATION_ERROR"
-	CodeNotFound      ErrorCode = "NOT_FOUND"
-	CodeUnauthorized  ErrorCode = "UNAUTHORIZED"
-	CodeForbidden     ErrorCode = "FORBIDDEN"
-	CodeConflict      ErrorCode = "CONFLICT"
+	CodeInternal     ErrorCode = "INTERNAL_ERROR"
+	CodeValidation   ErrorCode = "VALIDATION_ERROR"
+	CodeNotFound     ErrorCode = "NOT_FOUND"
+	CodeUnauthorized ErrorCode = "UNAUTHORIZED"
+	CodeForbidden    ErrorCode = "FORBIDDEN"
+	CodeConflict     ErrorCode = "CONFLICT"
 )
 
 // AppError represents a standardized application error

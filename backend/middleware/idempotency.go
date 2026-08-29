@@ -18,14 +18,14 @@ import (
 
 // IdempotencyConfig holds configuration for idempotency middleware
 type IdempotencyConfig struct {
-	TTL           time.Duration // Time to live for idempotency keys (default: 24 hours)
+	TTL            time.Duration // Time to live for idempotency keys (default: 24 hours)
 	AllowedMethods []string      // HTTP methods that require idempotency keys
 }
 
 // DefaultIdempotencyConfig returns default configuration
 func DefaultIdempotencyConfig() IdempotencyConfig {
 	return IdempotencyConfig{
-		TTL:           24 * time.Hour,
+		TTL:            24 * time.Hour,
 		AllowedMethods: []string{"POST", "PUT", "PATCH"},
 	}
 }

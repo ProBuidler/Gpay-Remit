@@ -237,12 +237,12 @@ func MonitorConnectionPool(db *sql.DB) {
 
 		// Log connection pool metrics
 		logger.Log.WithFields(map[string]interface{}{
-			"open_connections":  stats.OpenConnections,
-			"in_use":             stats.InUse,
-			"idle":               stats.Idle,
-			"wait_count":         stats.WaitCount,
-			"wait_duration_ms":   stats.WaitDuration.Milliseconds(),
-			"max_idle_closed":    stats.MaxIdleClosed,
+			"open_connections":    stats.OpenConnections,
+			"in_use":              stats.InUse,
+			"idle":                stats.Idle,
+			"wait_count":          stats.WaitCount,
+			"wait_duration_ms":    stats.WaitDuration.Milliseconds(),
+			"max_idle_closed":     stats.MaxIdleClosed,
 			"max_lifetime_closed": stats.MaxLifetimeClosed,
 		}).Debug("Database connection pool stats")
 
@@ -258,8 +258,8 @@ func MonitorConnectionPool(db *sql.DB) {
 		// Alert if wait queue is building up
 		if stats.WaitCount > 0 {
 			logger.Log.WithFields(map[string]interface{}{
-				"wait_count":     stats.WaitCount,
-				"wait_duration":  stats.WaitDuration.Seconds(),
+				"wait_count":    stats.WaitCount,
+				"wait_duration": stats.WaitDuration.Seconds(),
 				"connections":   stats.OpenConnections,
 			}).Warn("Queries waiting for database connections")
 		}
@@ -294,7 +294,7 @@ func getEnvAsFloat(key string, defaultValue float64) float64 {
 }
 
 // isEnvSet returns true when the given environment variable is explicitly set
-// (even to an empty string). This distinguishes "not set" from "set to ''".
+// (even to an empty string). This distinguishes "not set" from "set to ”".
 func isEnvSet(key string) bool {
 	_, ok := os.LookupEnv(key)
 	return ok

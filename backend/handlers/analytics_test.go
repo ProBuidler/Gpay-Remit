@@ -123,7 +123,7 @@ func TestGetVolumeMetrics(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			router := gin.New()
-	router.Use(middleware.ErrorHandler())
+			router.Use(middleware.ErrorHandler())
 			router.GET("/analytics/volume", handler.GetVolumeMetrics)
 
 			req := httptest.NewRequest(http.MethodGet, "/analytics/volume"+tt.queryParams, nil)
@@ -216,7 +216,7 @@ func TestGetTopCorridors(t *testing.T) {
 				err := json.Unmarshal(w.Body.Bytes(), &response)
 				assert.NoError(t, err)
 				assert.Equal(t, float64(10), response["limit"])
-				
+
 				corridors, ok := response["corridors"].([]interface{})
 				assert.True(t, ok)
 				assert.Equal(t, 2, len(corridors))
@@ -244,7 +244,7 @@ func TestGetTopCorridors(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			router := gin.New()
-	router.Use(middleware.ErrorHandler())
+			router.Use(middleware.ErrorHandler())
 			router.GET("/analytics/top-corridors", handler.GetTopCorridors)
 
 			req := httptest.NewRequest(http.MethodGet, "/analytics/top-corridors"+tt.queryParams, nil)

@@ -24,10 +24,10 @@ func setupWebhookTestDB() *gorm.DB {
 // Test error classification (#197)
 func TestClassifyError(t *testing.T) {
 	tests := []struct {
-		name           string
-		err            error
-		statusCode     int
-		expectedType   ErrorClassification
+		name         string
+		err          error
+		statusCode   int
+		expectedType ErrorClassification
 	}{
 		{
 			name:         "Timeout Error",
@@ -78,11 +78,11 @@ func TestClassifyError(t *testing.T) {
 // Test retry policies (#197)
 func TestGetRetryPolicy(t *testing.T) {
 	tests := []struct {
-		name           string
-		errorType      ErrorClassification
-		expectRetries  int
-		expectDelay    time.Duration
-		shouldRetry    bool
+		name          string
+		errorType     ErrorClassification
+		expectRetries int
+		expectDelay   time.Duration
+		shouldRetry   bool
 	}{
 		{
 			name:          "Timeout - should retry with exponential backoff",
@@ -141,7 +141,7 @@ func TestGetRetryPolicy(t *testing.T) {
 // Test webhook delivery with different error types (#197)
 func TestWebhookDeliveryErrorHandling(t *testing.T) {
 	db := setupWebhookTestDB()
-	
+
 	t.Run("Success on Second Attempt", func(t *testing.T) {
 		// Create a server that fails first then succeeds
 		attempt := 0
@@ -157,13 +157,13 @@ func TestWebhookDeliveryErrorHandling(t *testing.T) {
 		defer server.Close()
 
 		service := NewWebhookDeliveryService(db)
-		
+
 		webhook := &models.Webhook{
 			ID:     1,
 			URL:    server.URL,
 			Secret: "test-secret",
 		}
-		
+
 		delivery := &models.WebhookDelivery{
 			ID:        1,
 			WebhookID: 1,
@@ -192,13 +192,13 @@ func TestWebhookDeliveryErrorHandling(t *testing.T) {
 		defer server.Close()
 
 		service := NewWebhookDeliveryService(db)
-		
+
 		webhook := &models.Webhook{
 			ID:     2,
 			URL:    server.URL,
 			Secret: "test-secret",
 		}
-		
+
 		delivery := &models.WebhookDelivery{
 			ID:        2,
 			WebhookID: 2,

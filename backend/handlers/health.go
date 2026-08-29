@@ -47,10 +47,10 @@ type databaseStatus struct {
 }
 
 type healthResponse struct {
-	Status       string                      `json:"status"`
-	Service      string                      `json:"service"`
-	Timestamp    string                      `json:"timestamp"`
-	Dependencies map[string]interface{}      `json:"dependencies,omitempty"`
+	Status       string                 `json:"status"`
+	Service      string                 `json:"service"`
+	Timestamp    string                 `json:"timestamp"`
+	Dependencies map[string]interface{} `json:"dependencies,omitempty"`
 }
 
 // Health returns detailed health status including all dependencies.

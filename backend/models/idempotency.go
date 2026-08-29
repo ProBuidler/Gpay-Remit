@@ -8,10 +8,10 @@ import (
 
 // IdempotencyRecord stores idempotency key information for request deduplication
 type IdempotencyRecord struct {
-	ID               uint           `gorm:"primaryKey" json:"id"`
-	CreatedAt        time.Time      `json:"created_at"`
-	UpdatedAt        time.Time      `json:"updated_at"`
-	DeletedAt        gorm.DeletedAt `gorm:"index" json:"-"`
+	ID        uint           `gorm:"primaryKey" json:"id"`
+	CreatedAt time.Time      `json:"created_at"`
+	UpdatedAt time.Time      `json:"updated_at"`
+	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
 	// uniqueIndex (#195): a plain index does not prevent two concurrent
 	// requests with the same key from both passing a "does this exist?"
 	// check before either commits. The actual DB-level constraint is
@@ -19,19 +19,19 @@ type IdempotencyRecord struct {
 	// (a partial unique index respecting soft-deletes) since this project
 	// applies schema changes via SQL migration files, not GORM AutoMigrate
 	// — this tag documents the invariant rather than enforcing it itself.
-	IdempotencyKey   string         `gorm:"size:256;not null;uniqueIndex" json:"idempotency_key"`
-	RequestHash      string         `gorm:"size:64;not null" json:"request_hash"`
-	RequestMethod    string         `gorm:"size:10;not null" json:"request_method"`
-	RequestPath      string         `gorm:"size:512;not null" json:"request_path"`
-	Status           string         `gorm:"size:20;not null;default:'processing'" json:"status"` // processing, completed, failed
-	ResponseStatus   int            `gorm:"default:0" json:"response_status"`
-	ResponseBody     string         `gorm:"type:text" json:"response_body"`
-	CreatedAtUnix    int64          `gorm:"not null" json:"created_at_unix"`
-	ExpiresAt        time.Time      `gorm:"index" json:"expires_at"`
-	CompletedAt      *time.Time     `json:"completed_at"`
-	RequestBody      string         `gorm:"type:text" json:"request_body"` // Optional: store request body for debugging
-	UserID           uint           `gorm:"index" json:"user_id"`          // Optional: associate with user
-	IPAddress        string         `gorm:"size:45" json:"ip_address"`     // Optional: store IP for audit
+	IdempotencyKey string     `gorm:"size:256;not null;uniqueIndex" json:"idempotency_key"`
+	RequestHash    string     `gorm:"size:64;not null" json:"request_hash"`
+	RequestMethod  string     `gorm:"size:10;not null" json:"request_method"`
+	RequestPath    string     `gorm:"size:512;not null" json:"request_path"`
+	Status         string     `gorm:"size:20;not null;default:'processing'" json:"status"` // processing, completed, failed
+	ResponseStatus int        `gorm:"default:0" json:"response_status"`
+	ResponseBody   string     `gorm:"type:text" json:"response_body"`
+	CreatedAtUnix  int64      `gorm:"not null" json:"created_at_unix"`
+	ExpiresAt      time.Time  `gorm:"index" json:"expires_at"`
+	CompletedAt    *time.Time `json:"completed_at"`
+	RequestBody    string     `gorm:"type:text" json:"request_body"` // Optional: store request body for debugging
+	UserID         uint       `gorm:"index" json:"user_id"`          // Optional: associate with user
+	IPAddress      string     `gorm:"size:45" json:"ip_address"`     // Optional: store IP for audit
 }
 
 // TableName overrides the table name

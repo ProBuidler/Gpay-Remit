@@ -86,7 +86,7 @@ func (h *ComplianceHandler) GenerateComplianceReport(c *gin.Context) {
 		if p.Amount >= 10000 {
 			flag = "HIGH_VALUE_REVIEW"
 		}
-		
+
 		row := []string{
 			fmt.Sprintf("%d", p.ID),
 			p.CreatedAt.Format(time.RFC3339),

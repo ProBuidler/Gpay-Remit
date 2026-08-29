@@ -14,24 +14,24 @@ const (
 )
 
 type VersionInfo struct {
-	Version          string `json:"version"`
-	IsDeprecated     bool   `json:"is_deprecated"`
-	DeprecationDate  string `json:"deprecation_date,omitempty"`
-	SunsetDate       string `json:"sunset_date,omitempty"`
+	Version           string `json:"version"`
+	IsDeprecated      bool   `json:"is_deprecated"`
+	DeprecationDate   string `json:"deprecation_date,omitempty"`
+	SunsetDate        string `json:"sunset_date,omitempty"`
 	DeprecationNotice string `json:"deprecation_notice,omitempty"`
 }
 
 func VersionMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		requestedVersion := extractVersion(c)
-		
+
 		if requestedVersion == "" {
 			requestedVersion = DefaultAPIVersion
 		}
 
 		if !isValidVersion(requestedVersion) {
 			c.JSON(http.StatusBadRequest, gin.H{
-				"error": "Invalid API version",
+				"error":              "Invalid API version",
 				"supported_versions": []string{"v1", "v2"},
 			})
 			c.Abort()
@@ -108,7 +108,7 @@ func GetAPIVersion(c *gin.Context) string {
 func RequireVersion(allowedVersions ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		currentVersion := GetAPIVersion(c)
-		
+
 		allowed := false
 		for _, v := range allowedVersions {
 			if currentVersion == v {
@@ -119,8 +119,8 @@ func RequireVersion(allowedVersions ...string) gin.HandlerFunc {
 
 		if !allowed {
 			c.JSON(http.StatusNotAcceptable, gin.H{
-				"error": "This endpoint is not available in the requested API version",
-				"current_version": currentVersion,
+				"error":             "This endpoint is not available in the requested API version",
+				"current_version":   currentVersion,
 				"required_versions": allowedVersions,
 			})
 			c.Abort()

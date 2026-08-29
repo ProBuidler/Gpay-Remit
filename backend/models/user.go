@@ -17,30 +17,30 @@ import (
 )
 
 type User struct {
-	ID                    uint           `gorm:"primaryKey" json:"id"`
-	CreatedAt             time.Time      `json:"created_at"`
-	UpdatedAt             time.Time      `json:"updated_at"`
-	DeletedAt             gorm.DeletedAt `gorm:"index" json:"-"`
-	Email                 string         `gorm:"uniqueIndex;size:255;not null" json:"email"`
-	Name                  string         `gorm:"size:255;not null" json:"name"`
-	StellarAddress        string         `gorm:"uniqueIndex;size:56;not null" json:"stellar_address"`
-	PasswordHash          string         `gorm:"size:255;not null" json:"-"`
-	Role                  string         `gorm:"size:20;default:'user'" json:"role"`
-	Country               string         `gorm:"size:2" json:"country"`
-	KYCStatus             string         `gorm:"size:20;default:'pending'" json:"kyc_status"`
-	KYCVerifiedAt         *time.Time     `json:"kyc_verified_at"`
-	IsActive              bool           `gorm:"index;default:true" json:"is_active"`
-	DefaultCurrency       string         `gorm:"size:10;default:'USD'" json:"default_currency"`
-	EmailNotifications    bool           `gorm:"default:true" json:"email_notifications"`
-	Preferences           string         `gorm:"type:jsonb;default:'{}'" json:"preferences"`
-	ResetToken            string         `gorm:"size:255;index" json:"-"`
-	ResetTokenExpiresAt   *time.Time     `json:"-"`
-	FailedLoginAttempts   int            `gorm:"default:0" json:"-"`
-	LockedUntil           *time.Time     `gorm:"index" json:"-"`
-	LastFailedLoginAt     *time.Time     `json:"-"`
-	TOTPSecret            string         `gorm:"size:255" json:"-"`
-	MFAEnabled            bool           `gorm:"default:false" json:"mfa_enabled"`
-	MFASetupCompletedAt   *time.Time     `json:"-"`
+	ID                  uint           `gorm:"primaryKey" json:"id"`
+	CreatedAt           time.Time      `json:"created_at"`
+	UpdatedAt           time.Time      `json:"updated_at"`
+	DeletedAt           gorm.DeletedAt `gorm:"index" json:"-"`
+	Email               string         `gorm:"uniqueIndex;size:255;not null" json:"email"`
+	Name                string         `gorm:"size:255;not null" json:"name"`
+	StellarAddress      string         `gorm:"uniqueIndex;size:56;not null" json:"stellar_address"`
+	PasswordHash        string         `gorm:"size:255;not null" json:"-"`
+	Role                string         `gorm:"size:20;default:'user'" json:"role"`
+	Country             string         `gorm:"size:2" json:"country"`
+	KYCStatus           string         `gorm:"size:20;default:'pending'" json:"kyc_status"`
+	KYCVerifiedAt       *time.Time     `json:"kyc_verified_at"`
+	IsActive            bool           `gorm:"index;default:true" json:"is_active"`
+	DefaultCurrency     string         `gorm:"size:10;default:'USD'" json:"default_currency"`
+	EmailNotifications  bool           `gorm:"default:true" json:"email_notifications"`
+	Preferences         string         `gorm:"type:jsonb;default:'{}'" json:"preferences"`
+	ResetToken          string         `gorm:"size:255;index" json:"-"`
+	ResetTokenExpiresAt *time.Time     `json:"-"`
+	FailedLoginAttempts int            `gorm:"default:0" json:"-"`
+	LockedUntil         *time.Time     `gorm:"index" json:"-"`
+	LastFailedLoginAt   *time.Time     `json:"-"`
+	TOTPSecret          string         `gorm:"size:255" json:"-"`
+	MFAEnabled          bool           `gorm:"default:false" json:"mfa_enabled"`
+	MFASetupCompletedAt *time.Time     `json:"-"`
 }
 
 // TableName overrides the table name.
@@ -147,21 +147,21 @@ func (u *User) IsAccountLocked() bool {
 // RecordFailedLogin records a failed login attempt and locks account if threshold reached
 func (u *User) RecordFailedLogin(db *gorm.DB) error {
 	now := time.Now()
-	
+
 	// Reset counter if last failed login was more than 15 minutes ago
 	if u.LastFailedLoginAt != nil && now.Sub(*u.LastFailedLoginAt) > 15*time.Minute {
 		u.FailedLoginAttempts = 0
 	}
-	
+
 	u.FailedLoginAttempts++
 	u.LastFailedLoginAt = &now
-	
+
 	// Lock account after 5 failed attempts
 	if u.FailedLoginAttempts >= 5 {
 		lockUntil := now.Add(30 * time.Minute)
 		u.LockedUntil = &lockUntil
 	}
-	
+
 	return db.Save(u).Error
 }
 

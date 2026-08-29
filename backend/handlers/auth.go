@@ -258,7 +258,6 @@ func (h *AuthHandler) Refresh(c *gin.Context) {
 	})
 }
 
-
 // generateSecureToken generates a cryptographically secure random token
 func generateSecureToken(length int) (string, error) {
 	bytes := make([]byte, length)
@@ -499,7 +498,7 @@ func (h *AuthHandler) ResetPassword(c *gin.Context) {
 	user.PasswordHash = hash
 	user.ResetToken = ""
 	user.ResetTokenExpiresAt = nil
-	
+
 	// Also reset any account lockout
 	user.FailedLoginAttempts = 0
 	user.LockedUntil = nil

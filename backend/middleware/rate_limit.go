@@ -162,7 +162,7 @@ func (rl *RateLimiter) ResetUserLimit(key string) {
 func (rl *RateLimiter) GetAllLimits() map[string]*UserLimit {
 	rl.mu.RLock()
 	defer rl.mu.RUnlock()
-	
+
 	// Create a copy to avoid race conditions
 	copy := make(map[string]*UserLimit)
 	for k, v := range rl.limits {
@@ -178,14 +178,14 @@ func (rl *RateLimiter) GetAllLimits() map[string]*UserLimit {
 // RateLimitMiddleware applies rate limiting based on user ID
 func RateLimitMiddleware(cfg *config.Config) gin.HandlerFunc {
 	limiter := GetRateLimiter(cfg)
-	
+
 	// Default limits per endpoint (requests per minute)
 	endpointLimits := map[string]int{
-		"POST /api/v1/remittances":        10,  // 10 remittances per minute
+		"POST /api/v1/remittances":        10, // 10 remittances per minute
 		"POST /api/v1/remittances/create": 10,
-		"GET /api/v1/remittances":         60,  // 60 reads per minute
+		"GET /api/v1/remittances":         60, // 60 reads per minute
 		"POST /api/v1/invoices":           20,
-		"POST /api/v1/auth/login":         5,   // 5 login attempts per minute
+		"POST /api/v1/auth/login":         5, // 5 login attempts per minute
 		"POST /api/v1/auth/register":      3,
 		"GET /api/v1/exchange-rates":      30, // 30 lookups per minute (backed by cache)
 		"GET /api/v2/exchange-rates":      30,
@@ -202,7 +202,7 @@ func RateLimitMiddleware(cfg *config.Config) gin.HandlerFunc {
 
 		userID := fmt.Sprintf("%v", userIDInterface)
 		endpoint := fmt.Sprintf("%s %s", c.Request.Method, c.FullPath())
-		
+
 		// Create a unique key for this user+endpoint combination
 		limitKey := fmt.Sprintf("user:%s:endpoint:%s", userID, endpoint)
 
@@ -248,11 +248,11 @@ func RateLimitMiddleWare() gin.HandlerFunc {
 // AdminResetRateLimit resets rate limit for a specific user (admin endpoint handler)
 func AdminResetRateLimit(cfg *config.Config) gin.HandlerFunc {
 	limiter := GetRateLimiter(cfg)
-	
+
 	return func(c *gin.Context) {
 		userID := c.Query("user_id")
 		endpoint := c.Query("endpoint")
-		
+
 		if userID == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "user_id is required"})
 			return
@@ -282,12 +282,12 @@ func AdminResetRateLimit(cfg *config.Config) gin.HandlerFunc {
 // AdminViewRateLimits returns current rate limit status (admin endpoint handler)
 func AdminViewRateLimits(cfg *config.Config) gin.HandlerFunc {
 	limiter := GetRateLimiter(cfg)
-	
+
 	return func(c *gin.Context) {
 		userID := c.Query("user_id")
-		
+
 		allLimits := limiter.GetAllLimits()
-		
+
 		if userID != "" {
 			// Filter by user
 			userLimits := make(map[string]*UserLimit)
@@ -304,4 +304,3 @@ func AdminViewRateLimits(cfg *config.Config) gin.HandlerFunc {
 		}
 	}
 }
-

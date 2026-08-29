@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"context"
 	"bytes"
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -10,12 +10,12 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/stellar/go/txnbuild"
 	"github.com/stretchr/testify/assert"
 	"github.com/yourusername/gpay-remit/config"
 	"github.com/yourusername/gpay-remit/middleware"
 	"github.com/yourusername/gpay-remit/models"
 	"github.com/yourusername/gpay-remit/services"
-	"github.com/stellar/go/txnbuild"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -94,11 +94,11 @@ func TestCreateRemittance(t *testing.T) {
 
 	t.Run("Valid Request", func(t *testing.T) {
 		reqBody := CreateRemittanceRequest{
-			SenderAccount:   "GCO7V6V6VZ5X6Z5X6Z5X6Z5X6Z5X6Z5X6Z5X6Z5X6Z5X6Z5X6Z5X6Z5X",
+			SenderAccount:    "GCO7V6V6VZ5X6Z5X6Z5X6Z5X6Z5X6Z5X6Z5X6Z5X6Z5X6Z5X6Z5X6Z5X",
 			RecipientAccount: "GCO7V6V6VZ5X6Z5X6Z5X6Z5X6Z5X6Z5X6Z5X6Z5X6Z5X6Z5X6Z5X6Z5X",
-			Amount:          100.50,
-			AssetCode:       "USDC",
-			Conditions:      map[string]interface{}{"note": "test"},
+			Amount:           100.50,
+			AssetCode:        "USDC",
+			Conditions:       map[string]interface{}{"note": "test"},
 		}
 		body, _ := json.Marshal(reqBody)
 		w := httptest.NewRecorder()
@@ -213,7 +213,7 @@ func TestCreateRemittance(t *testing.T) {
 func TestPaginationOverflow(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	db := setupTestDB()
-	
+
 	// Create some test payments
 	for i := 0; i < 5; i++ {
 		payment := models.Payment{
@@ -225,7 +225,7 @@ func TestPaginationOverflow(t *testing.T) {
 		}
 		db.Create(&payment)
 	}
-	
+
 	mockStellar := &MockStellarClient{}
 	testCfg := &config.Config{}
 	handler := &RemittanceHandler{
@@ -277,7 +277,7 @@ func TestPaginationOverflow(t *testing.T) {
 func TestCursorPagination(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	db := setupTestDB()
-	
+
 	// Create test payments with known timestamps
 	now := time.Now()
 	for i := 0; i < 5; i++ {
@@ -291,7 +291,7 @@ func TestCursorPagination(t *testing.T) {
 		}
 		db.Create(&payment)
 	}
-	
+
 	mockStellar := &MockStellarClient{}
 	testCfg := &config.Config{}
 	handler := &RemittanceHandler{
@@ -312,7 +312,7 @@ func TestCursorPagination(t *testing.T) {
 		router.ServeHTTP(w, req)
 
 		assert.Equal(t, http.StatusOK, w.Code)
-		
+
 		var response ListRemittancesResponse
 		err := json.Unmarshal(w.Body.Bytes(), &response)
 		assert.NoError(t, err)
@@ -333,13 +333,13 @@ func TestCursorPagination(t *testing.T) {
 	t.Run("Empty Result Set", func(t *testing.T) {
 		// Clear all payments
 		db.Where("1 = 1").Delete(&models.Payment{})
-		
+
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("GET", "/remittances?limit=2", nil)
 		router.ServeHTTP(w, req)
 
 		assert.Equal(t, http.StatusOK, w.Code)
-		
+
 		var response ListRemittancesResponse
 		err := json.Unmarshal(w.Body.Bytes(), &response)
 		assert.NoError(t, err)

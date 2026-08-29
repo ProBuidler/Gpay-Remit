@@ -207,13 +207,14 @@ func getRetryPolicy(errorType ErrorClassification) (maxRetries int, baseDelay ti
 		return 1, 2 * time.Second, true
 	}
 }
+
 // DeliverWebhook delivers a webhook with per-error-type retry logic (#197)
 func (s *WebhookDeliveryService) DeliverWebhook(webhook *models.Webhook, delivery *models.WebhookDelivery, requestID string) {
 	for {
 		delivery.AttemptCount++
-		
+
 		success, responseCode, responseBody, errMsg, err := s.sendWebhookRequest(webhook, delivery.Payload, requestID)
-		
+
 		delivery.ResponseCode = responseCode
 		delivery.ResponseBody = responseBody
 		delivery.ErrorMessage = errMsg
@@ -275,7 +276,7 @@ func (s *WebhookDeliveryService) DeliverWebhook(webhook *models.Webhook, deliver
 		s.db.Save(delivery)
 
 		logLevel.Warn("Webhook delivery failed, will retry after delay")
-		
+
 		// Wait before retry
 		time.Sleep(delay)
 	}
@@ -342,9 +343,9 @@ func VerifySignature(secret, payload, signature string) bool {
 func (s *WebhookDeliveryService) RetryFailedDeliveries() error {
 	var deliveries []models.WebhookDelivery
 	now := time.Now()
-	
+
 	// Find deliveries that need retry
-	if err := s.db.Where("status IN (?) AND (next_retry_at IS NULL OR next_retry_at <= ?)", 
+	if err := s.db.Where("status IN (?) AND (next_retry_at IS NULL OR next_retry_at <= ?)",
 		[]string{"pending", "failed"}, now).
 		Where("attempt_count < ?", 5).
 		Find(&deliveries).Error; err != nil {

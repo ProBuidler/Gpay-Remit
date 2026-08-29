@@ -188,7 +188,7 @@ func (h *ExportHandler) exportPDF(c *gin.Context, payments []models.Payment) {
 	// Table header
 	pdf.SetFont("Arial", "B", 8)
 	pdf.SetFillColor(200, 220, 255)
-	
+
 	// Column widths (total: 277mm for A4 landscape)
 	widths := []float64{10, 35, 20, 20, 20, 15, 15, 15, 15, 15, 15, 20, 52}
 	headers := []string{
@@ -270,10 +270,10 @@ func (h *ExportHandler) exportPDF(c *gin.Context, payments []models.Payment) {
 	pdf.Ln(8)
 
 	pdf.SetFont("Arial", "", 9)
-	
+
 	var totalAmount, totalFees float64
 	statusCounts := make(map[string]int)
-	
+
 	for _, p := range payments {
 		totalAmount += p.Amount
 		totalFees += p.Fee
@@ -284,7 +284,7 @@ func (h *ExportHandler) exportPDF(c *gin.Context, payments []models.Payment) {
 	pdf.Ln(6)
 	pdf.Cell(0, 6, fmt.Sprintf("Total Fees Collected: %.4f", totalFees))
 	pdf.Ln(6)
-	
+
 	pdf.Cell(0, 6, "Status Breakdown:")
 	pdf.Ln(6)
 	for status, count := range statusCounts {

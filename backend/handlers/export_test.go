@@ -26,24 +26,24 @@ func seedTestPayments(db *gorm.DB, count int) []models.Payment {
 	payments := make([]models.Payment, count)
 	for i := 0; i < count; i++ {
 		payment := models.Payment{
-			SenderID:        uint(i + 1),
-			SenderAccount:   fmt.Sprintf("SENDER%d", i+1),
-			RecipientID:     uint(i + 100),
+			SenderID:         uint(i + 1),
+			SenderAccount:    fmt.Sprintf("SENDER%d", i+1),
+			RecipientID:      uint(i + 100),
 			RecipientAccount: fmt.Sprintf("RECIPIENT%d", i+1),
-			Amount:          float64(100 + i*10),
-			Currency:        "USD",
-			TargetCurrency:  "EUR",
-			ConvertedAmount: float64(90 + i*9),
-			Status:          "completed",
-			Fee:             2.5,
-			PlatformFee:     1.0,
-			ForexFee:        0.5,
-			ComplianceFee:   0.5,
-			NetworkFee:      0.5,
-			TxHash:          fmt.Sprintf("hash%d", i),
-			EscrowID:        fmt.Sprintf("escrow%d", i),
-			Notes:           fmt.Sprintf("Test payment %d", i),
-			CreatedAt:       time.Now().Add(time.Duration(-i) * time.Hour),
+			Amount:           float64(100 + i*10),
+			Currency:         "USD",
+			TargetCurrency:   "EUR",
+			ConvertedAmount:  float64(90 + i*9),
+			Status:           "completed",
+			Fee:              2.5,
+			PlatformFee:      1.0,
+			ForexFee:         0.5,
+			ComplianceFee:    0.5,
+			NetworkFee:       0.5,
+			TxHash:           fmt.Sprintf("hash%d", i),
+			EscrowID:         fmt.Sprintf("escrow%d", i),
+			Notes:            fmt.Sprintf("Test payment %d", i),
+			CreatedAt:        time.Now().Add(time.Duration(-i) * time.Hour),
 		}
 		db.Create(&payment)
 		payments[i] = payment
@@ -115,7 +115,7 @@ func TestExportTransactionsPDF(t *testing.T) {
 func TestExportTransactionsWithFilters(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	db := setupExportTestDB()
-	
+
 	// Create payments with different statuses and dates
 	db.Create(&models.Payment{
 		SenderID: 1, RecipientID: 2, Amount: 100, Currency: "USD",

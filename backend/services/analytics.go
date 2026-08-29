@@ -13,36 +13,36 @@ type AnalyticsService struct {
 }
 
 type VolumeMetrics struct {
-	Period       string  `json:"period"`
-	TotalVolume  float64 `json:"total_volume"`
-	TotalCount   int64   `json:"total_count"`
-	Currency     string  `json:"currency"`
-	StartDate    string  `json:"start_date"`
-	EndDate      string  `json:"end_date"`
+	Period      string  `json:"period"`
+	TotalVolume float64 `json:"total_volume"`
+	TotalCount  int64   `json:"total_count"`
+	Currency    string  `json:"currency"`
+	StartDate   string  `json:"start_date"`
+	EndDate     string  `json:"end_date"`
 }
 
 type FeeMetrics struct {
-	Period          string  `json:"period"`
-	TotalFees       float64 `json:"total_fees"`
-	PlatformFees    float64 `json:"platform_fees"`
-	ForexFees       float64 `json:"forex_fees"`
-	ComplianceFees  float64 `json:"compliance_fees"`
-	NetworkFees     float64 `json:"network_fees"`
-	TransactionCount int64  `json:"transaction_count"`
-	StartDate       string  `json:"start_date"`
-	EndDate         string  `json:"end_date"`
+	Period           string  `json:"period"`
+	TotalFees        float64 `json:"total_fees"`
+	PlatformFees     float64 `json:"platform_fees"`
+	ForexFees        float64 `json:"forex_fees"`
+	ComplianceFees   float64 `json:"compliance_fees"`
+	NetworkFees      float64 `json:"network_fees"`
+	TransactionCount int64   `json:"transaction_count"`
+	StartDate        string  `json:"start_date"`
+	EndDate          string  `json:"end_date"`
 }
 
 type SuccessRateMetrics struct {
-	Period          string  `json:"period"`
-	TotalTransactions int64  `json:"total_transactions"`
-	SuccessfulTransactions int64 `json:"successful_transactions"`
-	FailedTransactions int64 `json:"failed_transactions"`
-	PendingTransactions int64 `json:"pending_transactions"`
-	SuccessRate     float64 `json:"success_rate"`
-	FailureRate     float64 `json:"failure_rate"`
-	StartDate       string  `json:"start_date"`
-	EndDate         string  `json:"end_date"`
+	Period                 string  `json:"period"`
+	TotalTransactions      int64   `json:"total_transactions"`
+	SuccessfulTransactions int64   `json:"successful_transactions"`
+	FailedTransactions     int64   `json:"failed_transactions"`
+	PendingTransactions    int64   `json:"pending_transactions"`
+	SuccessRate            float64 `json:"success_rate"`
+	FailureRate            float64 `json:"failure_rate"`
+	StartDate              string  `json:"start_date"`
+	EndDate                string  `json:"end_date"`
 }
 
 type CorridorMetrics struct {

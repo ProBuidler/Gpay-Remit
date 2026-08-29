@@ -446,7 +446,6 @@ func (s *EmailService) SendPaymentFailedEmail(user *models.User, payment *models
 	return s.SendEmail(user.Email, subject, body.String())
 }
 
-
 // SendPasswordResetEmail sends a password reset link to the user
 func (s *EmailService) SendPasswordResetEmail(user *models.User, token string) error {
 	tmpl := `
