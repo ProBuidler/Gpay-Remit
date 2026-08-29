@@ -5,9 +5,13 @@ import RemittanceForm from "./components/RemittanceForm";
 import InvoiceViewer from "./components/InvoiceViewer";
 import ErrorBoundary from "./components/ErrorBoundary";
 import TransactionHistory from "./pages/TransactionHistory";
+import { useGlobalShortcuts } from "./hooks/useKeyboardShortcuts";
+import { ShortcutHelp } from "./components/ShortcutHelp";
 import "./App.css";
 
 function App() {
+  const { showHelp, setShowHelp } = useGlobalShortcuts();
+
   return (
     <Router>
       <div className="App">
@@ -18,6 +22,23 @@ function App() {
             <Link to="/">Send Remittance</Link>
             <Link to="/invoices">View Invoices</Link>
             <Link to="/transactions">Transaction History</Link>
+            <button
+              onClick={() => setShowHelp(true)}
+              aria-label="Show keyboard shortcuts (press ?)"
+              title="Press ? to show shortcuts"
+              style={{
+                marginLeft: 12,
+                background: "#4338ca",
+                color: "#fff",
+                border: 0,
+                borderRadius: 6,
+                padding: "6px 12px",
+                cursor: "pointer",
+                fontSize: 13,
+              }}
+            >
+              ? Shortcuts
+            </button>
           </nav>
         </header>
         {/* #105 — wrap route tree so any page-level render error shows a
@@ -31,6 +52,23 @@ function App() {
             </Routes>
           </main>
         </ErrorBoundary>
+        <ShortcutHelp open={showHelp} onClose={() => setShowHelp(false)} />
+        <div
+          aria-hidden="true"
+          style={{
+            position: "fixed",
+            bottom: 12,
+            right: 12,
+            fontSize: 11,
+            color: "#64748b",
+            background: "#f8fafc",
+            padding: "6px 10px",
+            borderRadius: 6,
+            border: "1px solid #e2e8f0",
+          }}
+        >
+          Press <kbd>?</kbd> for shortcuts
+        </div>
       </div>
     </Router>
   );
